@@ -2,6 +2,7 @@ from langchain_community.document_loaders import PyMuPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Step 1: Load raw PDF(s)
 DATA_PATH="data/"
