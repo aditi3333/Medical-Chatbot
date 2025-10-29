@@ -19,10 +19,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 DB_FAISS_PATH = "vectorstore/db_faiss"
 #CSV_FILEPATH = "data/testing.csv"
-#CSV_FILEPATH = "data/my_Dataset.csv"
-CSV_FILEPATH = "data/medicine_related.csv"
-BEGIN = 39  # Start index for prompts list
-END = 42    # End index for prompts list (exclusive)
+CSV_FILEPATH = "data/my_Dataset.csv"
+#CSV_FILEPATH = "data/medicine_related.csv"
+BEGIN = 0  # Start index for prompts list
+END = 101
+   # End index for prompts list (exclusive)
 WAIT_MIN_SECONDS = 20
 WAIT_MAX_SECONDS = 60
 
@@ -30,7 +31,7 @@ WAIT_MAX_SECONDS = 60
 def make_llm():
     return ChatOpenAI(
         model="llama3.1:8b",
-        base_url="https://genai.science-cloud.hu/api/",
+        base_url="https://genai.science-cloud.hu/performance-api/",
         api_key=os.environ.get("GENAI_API_KEY"),
         temperature=0
     )
@@ -276,7 +277,6 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
             cosine_similarity+=1
             continue
 
-        raw_preview_injection = ""
         # Defense Layer 3: Injection Question Check
         try:
             injection_response = injection_chain.invoke({'query': question})
@@ -286,31 +286,30 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
         except Exception as e:
             injection_result = f"ERROR: {e}"
             #print(f"Injection Check ERROR: {injection_result}")
-        
+
         if raw_preview_injection.strip().lower().startswith("yes"):
             print("🚫 Prompt skipped because it contains injection.")
             injection_check+=1
             continue
 
-        # --- Waiting ---
-        wait_time = random.uniform(WAIT_MIN_SECONDS, WAIT_MAX_SECONDS)
-        print(f"Waiting {wait_time:.2f}s before next prompt...")
-        time.sleep(wait_time)
+        # # --- Waiting ---
+        # wait_time = random.uniform(WAIT_MIN_SECONDS, WAIT_MAX_SECONDS)
+        # print(f"Waiting {wait_time:.2f}s before next prompt...")
+        # time.sleep(wait_time)
         
-        # Defense Layer 4: Medical Question Check
-        raw_preview_check = ""
-        try:
-            check_response = check_chain.invoke({'query': question})
-            raw_preview_check = normalize_chain_output(check_response)[:200]
-            print(f"Is a medical question?: {raw_preview_check} ")
-        except Exception as e:
-            check_result = f"ERROR: {e}"
-            print(f"Medical Check ERROR: {check_result}")
-        # If medical check says "No", skip this prompt
-        if raw_preview_check.strip().lower().startswith("no"):
-            print("🚫 Prompt skipped because it's not purely medical (No).")
-            medical_check+=1
-            continue
+        # # Defense Layer 4: Medical Question Check
+        # try:
+        #     check_response = check_chain.invoke({'query': question})
+        #     raw_preview_check = normalize_chain_output(check_response)[:200]
+        #     print(f"Is a medical question?: {raw_preview_check} ")
+        # except Exception as e:
+        #     check_result = f"ERROR: {e}"
+        #     print(f"Medical Check ERROR: {check_result}")
+        # # If medical check says "No", skip this prompt
+        # if raw_preview_check.strip().lower().startswith("no"):
+        #     print("🚫 Prompt skipped because it's not purely medical (No).")
+        #     medical_check+=1
+        #     continue
         
         else:
             try:
