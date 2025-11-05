@@ -1,4 +1,4 @@
-# Securing LLMs: Medical Chatbot Defense Framework
+# Securing LLMs: Medical Chatbot Defense Pipeline
 
 This project presents a secure, cost-efficient defense pipeline for large language model (LLM) applications, demonstrated through a Retrieval-Augmented Generation (RAG)-based medical chatbot. The framework systematically mitigates prompt injection attacks—malicious inputs designed to manipulate LLM outputs or extract sensitive data.
 
@@ -7,7 +7,7 @@ By combining preventive and detective strategies into a layered defense pipeline
 ## Setup / Environment variables
 
 1. Set your LLM API key (if using OpenAI):
-export OPENAI_API_KEY="your_key_here"
+export GENAI_API_KEY="your_key_here"
 (or set it in Windows PowerShell / cmd appropriately)
 
 
