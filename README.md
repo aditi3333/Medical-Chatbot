@@ -29,4 +29,5 @@ export GENAI_API_KEY="your_key_here"
 - data/medicine_related.csv — benign medical prompts (used to test utility of the pipeline).
 - data/testing.csv — used to analyze and choose the cosine similarity threshold during development.
 
-
+## Research paper
+Read the research paper added to the repository with the name Securing Large Language Models
