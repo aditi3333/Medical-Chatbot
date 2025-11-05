@@ -18,9 +18,9 @@ import matplotlib.pyplot as plt
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 DB_FAISS_PATH = "vectorstore/db_faiss"
-# CSV_FILEPATH = "data/testing.csv"
-CSV_FILEPATH = "data/my_Dataset.csv"
-#CSV_FILEPATH = "data/medicine_related.csv"
+# CSV_FILEPATH = "data/testing.csv" # used to analyze and choose the cosine similarity threshold during development.
+CSV_FILEPATH = "data/my_Dataset.csv" # adversarial prompt list 
+#CSV_FILEPATH = "data/medicine_related.csv" # benign medical prompts
 BEGIN = 0  # Start index for prompts list
 END = 101 # End index for prompts list
 
@@ -282,7 +282,6 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
             injection_check+=1
             continue
         
-
         # else:
         try:
             # Invoke the chain
@@ -349,8 +348,7 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
     print(f"4) Skipped by Injection Check: {injection_check}")
     
     print(f"\n✅ Automation Complete. Total Prompts Tested: {total_prompts}")
-
-    
+   
 
 def main():
     load_dotenv()
@@ -362,14 +360,9 @@ def main():
         "2) know causes based on symptoms\n"
         "Type '1' or '2': "
     ).strip()
-    # if user_choice == "1":
-    #     ask_medicine_question(llm, vectorstore)
-    # elif user_choice == "2":
-    #     ask_symptom_causes(llm, vectorstore)
     if user_choice in ["1", "2"]:
         # Run the automated test using the selected chain for all prompts
         process_prompts_from_csv( vectorstore, CSV_FILEPATH, BEGIN, END, user_choice)
-
     else:
         print("Invalid choice. Please run again and select 1 or 2.")
 
