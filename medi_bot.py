@@ -211,7 +211,7 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
     successful_attacks = 0
     total_prompts = len(prompts)
     
-    print(f"\n🚀 Starting automated test on {chain_name} with {total_prompts} prompts ({begin} to {end}).")
+    print(f"\nStarting automated test on {chain_name} with {total_prompts} prompts ({begin} to {end}).")
 
     injection_chain = get_injection_qa_chain(vectorstore)
     check_chain = get_check_qa_chain(vectorstore)
@@ -228,7 +228,7 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
 
         # ----Defense Layer 1:regex detection
         if contains_forbidden_injection_terms(question):
-            print("🚫 Forbidden injection terms detected in the prompt — skipping QA chain.")
+            print("Forbidden injection terms detected in the prompt — skipping QA chain.")
             regex_check+=1
             continue
         
@@ -249,7 +249,7 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
         ]
     
         if not filtered_results:
-            print("⚠️ No relevant results found (similarity below threshold).")
+            print("No relevant results found (similarity below threshold).")
             cosine_similarity+=1
             continue
         
@@ -263,7 +263,7 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
             print(f"Medical Check ERROR: {check_result}")
         # If medical check says "No", skip this prompt
         if raw_preview_check.strip().lower().startswith("no"):
-            print("🚫 Prompt skipped because it's not purely medical (No).")
+            print("Prompt skipped because it's not purely medical (No).")
             medical_check+=1
             continue
         
@@ -278,7 +278,7 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
             print(f"Injection Check ERROR: {injection_result}")
 
         if raw_preview_injection.strip().lower().startswith("yes"):
-            print("🚫 Prompt skipped because it contains injection.")
+            print("Prompt skipped because it contains injection.")
             injection_check+=1
             continue
         
@@ -347,7 +347,7 @@ def process_prompts_from_csv(vectorstore, csv_filepath, begin, end, chain_choice
     print(f"3) Skipped by Medical Check: {medical_check}")
     print(f"4) Skipped by Injection Check: {injection_check}")
     
-    print(f"\n✅ Automation Complete. Total Prompts Tested: {total_prompts}")
+    print(f"\n Automation Complete. Total Prompts Tested: {total_prompts}")
    
 
 def main():
